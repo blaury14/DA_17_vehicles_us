@@ -8,20 +8,28 @@ car_data = pd.read_csv('vehicles_us.csv')
 # Establecer el título de la página
 st.title("DA-17_Bastian Laury")
 
-# 1. Listado de fabricantes con menos de 1000 anuncios
-st.header("Fabricantes con menos de 1000 anuncios")
-car_data['manufacturer'] = car_data['model'].apply(lambda x: x.split()[0])
-manufacturers_less_than_1000 = car_data['manufacturer'].value_counts()[car_data['manufacturer'].value_counts() < 1000]
-st.write(manufacturers_less_than_1000)
+# 1. Data Viewer con un checkbox para incluir fabricantes con menos de 1000 anuncios
+st.header("Data Viewer")
 
-# 2. Gráfico de dispersión con colores por tipo de vehículo y fabricante clickeable
-st.header("Gráfico de dispersión")
-fig = px.scatter(car_data, x="model_year", y="price", color="type", hover_data=["manufacturer"], custom_data=["manufacturer", "type"])
+# Checkbox para incluir fabricantes con menos de 1000 anuncios
+include_less_than_1000 = st.checkbox("Incluir fabricantes con menos de 1000 anuncios")
+
+if include_less_than_1000:
+    manufacturers_less_than_1000 = car_data['manufacturer'].value_counts()[car_data['manufacturer'].value_counts() < 1000]
+    st.write(manufacturers_less_than_1000)
+else:
+    st.write(car_data)
+
+# 2. Gráfico de barras con colores por tipo de vehículo y fabricante clickeable
+st.header("Gráfico de barras")
+
+fig = px.bar(car_data, x="manufacturer", color="type", barmode="group")
 st.plotly_chart(fig, use_container_width=True)
 
 # 3. Histograma de "condición" vs "Año del modelo"
 st.header("Histograma de Condición vs Año del Modelo")
-hist_fig = px.histogram(car_data, x="model_year", y="condition", color="condition")
+hist_fig = px.histogram(car_data, x="condition", y="model_year", color="condition")
+hist_fig.update_layout(barmode='overlay')
 st.plotly_chart(hist_fig, use_container_width=True)
 
 # 4. Comparador de precios entre fabricantes
