@@ -7,7 +7,7 @@ Este proyecto es una aplicación web que muestra visualizaciones interactivas de
 
 Para utilizar la aplicación, sigue estos pasos:
 
-1. Accede a la aplicación a través de [este enlace](URL_DE_TU_APLICACIÓN).
+1. Accede a la aplicación a través de [este enlace](https://da-17-vehicles-us.onrender.com).
 2. Una vez dentro de la aplicación, puedes hacer clic en los botones para construir el histograma y el gráfico de dispersión.
 3. Explora los gráficos interactivos y los datos para obtener información sobre los anuncios de venta de coches.
 
