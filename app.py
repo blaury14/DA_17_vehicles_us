@@ -65,3 +65,6 @@ filtered_data = car_data[(car_data['fabricante'] == fabricante1) | (car_data['fa
 # Crear el histograma de precios con los fabricantes seleccionados
 hist_compare = px.histogram(filtered_data, x="price", color="fabricante", barmode="overlay")
 st.plotly_chart(hist_compare, use_container_width=True)
+
+
+st.markdown("Link al repositorio: [GitHub - blaury14/DA_17_vehicles_us](https://github.com/blaury14/DA_17_vehicles_us)")
