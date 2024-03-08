@@ -15,7 +15,7 @@ st.header("Data Viewer")
 include_less_than_1000 = st.checkbox("Incluir fabricantes con menos de 1000 anuncios")
 
 if include_less_than_1000:
-    manufacturers_less_than_1000 = car_data['manufacturer'].value_counts()[car_data['manufacturer'].value_counts() < 1000]
+    manufacturers_less_than_1000 = car_data['model'].value_counts()[car_data['model'].value_counts() < 1000]
     st.write(manufacturers_less_than_1000)
 else:
     st.write(car_data)
@@ -23,7 +23,7 @@ else:
 # 2. Gráfico de barras con colores por tipo de vehículo y fabricante clickeable
 st.header("Gráfico de barras")
 
-fig = px.bar(car_data, x="manufacturer", color="type", barmode="group")
+fig = px.bar(car_data, x="model", color="type", barmode="group")
 st.plotly_chart(fig, use_container_width=True)
 
 # 3. Histograma de "condición" vs "Año del modelo"
