@@ -8,11 +8,13 @@ car_data = pd.read_csv('vehicles_us.csv')
 # Crear una nueva columna 'fabricante' a partir de la primera palabra en la columna 'model'
 car_data['fabricante'] = car_data['model'].str.split().str[0]
 
-# Transformar 'model_year' a tipo fecha
-car_data['model_year'] = pd.to_datetime(car_data['model_year'], format='%Y', errors='coerce')
+# Transformar 'model_year' a tipo fecha y mostrar solo el año
+car_data['model_year'] = pd.to_datetime(car_data['model_year'], format='%Y').dt.year
 
-# Transformar 'is_4wd' a booleana
+# Transformar 'is_4wd' a booleano (True = True, NaN = False)
 car_data['is_4wd'] = car_data['is_4wd'].notna()
+# Mostrar "True" cuando 'is_4wd' es True y una 'X' cuando es False
+car_data['is_4wd'] = car_data['is_4wd'].apply(lambda x: 'True' if x else 'X')
 
 # Establecer el título de la página
 st.title("DA-17_Bastian Laury")
