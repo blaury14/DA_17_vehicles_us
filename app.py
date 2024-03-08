@@ -34,9 +34,14 @@ st.plotly_chart(hist_fig, use_container_width=True)
 
 # 4. Comparador de precios entre fabricantes
 st.header("Comparador de precios entre fabricantes")
-manufacturer1 = st.selectbox("Selecciona el primer fabricante", car_data['manufacturer'].unique())
-manufacturer2 = st.selectbox("Selecciona el segundo fabricante", car_data['manufacturer'].unique())
 
-filtered_data = car_data[(car_data['manufacturer'] == manufacturer1) | (car_data['manufacturer'] == manufacturer2)]
-hist_compare = px.histogram(filtered_data, x="price", color="manufacturer", barmode="overlay")
+# Usamos la columna 'type' para representar a los fabricantes
+manufacturer1 = st.selectbox("Selecciona el primer fabricante", car_data['type'].unique())
+manufacturer2 = st.selectbox("Selecciona el segundo fabricante", car_data['type'].unique())
+
+# Filtrar los datos para los fabricantes seleccionados
+filtered_data = car_data[(car_data['type'] == manufacturer1) | (car_data['type'] == manufacturer2)]
+
+# Crear el histograma de precios con los fabricantes seleccionados
+hist_compare = px.histogram(filtered_data, x="price", color="type", barmode="overlay")
 st.plotly_chart(hist_compare, use_container_width=True)
