@@ -8,11 +8,22 @@ car_data = pd.read_csv('vehicles_us.csv')
 # Crear una nueva columna 'fabricante' a partir de la primera palabra en la columna 'model'
 car_data['fabricante'] = car_data['model'].str.split().str[0]
 
+# Extraer solo el modelo de la columna 'model' y asignarlo a una nueva columna 'modelo'
+car_data['modelo'] = car_data['model'].str.split().str[1:].str.join(' ')
+
+# Eliminar la columna 'model' original
+car_data.drop(columns=['model'], inplace=True)
+
 # Transformar 'model_year' a tipo fecha y mostrar solo el año
 car_data['model_year'] = pd.to_datetime(car_data['model_year'], format='%Y').dt.year
 
 # Transformar 'is_4wd' a booleano (True = True, NaN = False)
 car_data['is_4wd'] = car_data['is_4wd'].notna()
+
+# Reorganizar el orden de las columnas para que 'fabricante' esté entre 'model_year' y 'modelo'
+car_data = car_data[['price', 'model_year', 'fabricante', 'modelo', 'condition', 'cylinders', 
+                     'fuel', 'odometer', 'transmission', 'type', 'paint_color', 'is_4wd', 
+                     'date_posted', 'days_listed']]
 
 # Establecer el título de la página
 st.title("DA-17_Bastian Laury")
