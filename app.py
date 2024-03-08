@@ -1,32 +1,33 @@
+import streamlit as st
 import pandas as pd
 import plotly.express as px
-import streamlit as st
 
-# Leer el archivo CSV del conjunto de datos en un DataFrame
+# Cargar los datos
 car_data = pd.read_csv('vehicles_us.csv')
 
-# Crear una casilla de verificación para construir un histograma
-build_histogram = st.checkbox('Construir un histograma')
+# Establecer el título de la página
+st.title("DA-17_Bastian Laury")
 
-if build_histogram: # Si la casilla de verificación está seleccionada
-    # Escribir un mensaje
-    st.write('Construir un histograma para la columna odómetro')
-    
-    # Crear un histograma
-    fig = px.histogram(car_data, x="odometer")
-    
-    # Mostrar un gráfico Plotly interactivo
-    st.plotly_chart(fig, use_container_width=True)
+# 1. Listado de fabricantes con menos de 1000 anuncios
+st.header("Fabricantes con menos de 1000 anuncios")
+manufacturers_less_than_1000 = car_data['manufacturer'].value_counts()[car_data['manufacturer'].value_counts() < 1000]
+st.write(manufacturers_less_than_1000)
 
-# Crear una casilla de verificación para construir un gráfico de dispersión
-build_scatter = st.checkbox('Construir un gráfico de dispersión')
+# 2. Gráfico de dispersión con colores por tipo de vehículo y fabricante clickeable
+st.header("Gráfico de dispersión")
+fig = px.scatter(car_data, x="model_year", y="price", color="type", hover_data=["manufacturer"], custom_data=["manufacturer", "type"])
+st.plotly_chart(fig, use_container_width=True)
 
-if build_scatter: # Si la casilla de verificación está seleccionada
-    # Escribir un mensaje
-    st.write('Construir un gráfico de dispersión para el conjunto de datos de anuncios de venta de coches')
-    
-    # Crear un gráfico de dispersión
-    fig = px.scatter(car_data, x="year", y="price", color="fuel")
-    
-    # Mostrar un gráfico Plotly interactivo
-    st.plotly_chart(fig, use_container_width=True)
+# 3. Histograma de "condición" vs "Año del modelo"
+st.header("Histograma de Condición vs Año del Modelo")
+hist_fig = px.histogram(car_data, x="model_year", y="condition", color="condition")
+st.plotly_chart(hist_fig, use_container_width=True)
+
+# 4. Comparador de precios entre fabricantes
+st.header("Comparador de precios entre fabricantes")
+manufacturer1 = st.selectbox("Selecciona el primer fabricante", car_data['manufacturer'].unique())
+manufacturer2 = st.selectbox("Selecciona el segundo fabricante", car_data['manufacturer'].unique())
+
+filtered_data = car_data[(car_data['manufacturer'] == manufacturer1) | (car_data['manufacturer'] == manufacturer2)]
+hist_compare = px.histogram(filtered_data, x="price", color="manufacturer", barmode="overlay")
+st.plotly_chart(hist_compare, use_container_width=True)
