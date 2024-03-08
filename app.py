@@ -8,40 +8,55 @@ car_data = pd.read_csv('vehicles_us.csv')
 # Establecer el título de la página
 st.title("DA-17_Bastian Laury")
 
-# 1. Data Viewer con un checkbox para incluir fabricantes con menos de 1000 anuncios
+# 1. Filtros según las categorías en las columnas
+st.sidebar.header("Filtros")
+
+# Selector de columnas para filtrar
+column_to_filter = st.sidebar.selectbox("Selecciona una columna para filtrar", car_data.columns)
+
+# Lista única de valores en la columna seleccionada
+filter_values = car_data[column_to_filter].unique()
+
+# Selector desplegable para valores de filtro
+selected_filter_value = st.sidebar.selectbox(f"Selecciona un valor de '{column_to_filter}'", filter_values)
+
+# Filtrar los datos según el valor seleccionado
+filtered_car_data = car_data[car_data[column_to_filter] == selected_filter_value]
+
+# 2. Data Viewer con un checkbox para incluir fabricantes con menos de 1000 anuncios
 st.header("Data Viewer")
 
 # Checkbox para incluir fabricantes con menos de 1000 anuncios
 include_less_than_1000 = st.checkbox("Incluir fabricantes con menos de 1000 anuncios")
 
 if include_less_than_1000:
-    manufacturers_less_than_1000 = car_data['model'].value_counts()[car_data['model'].value_counts() < 1000]
+    manufacturers_less_than_1000 = filtered_car_data['model'].value_counts()[filtered_car_data['model'].value_counts() < 1000]
     st.write(manufacturers_less_than_1000)
 else:
-    st.write(car_data)
+    st.write(filtered_car_data)
 
-# 2. Gráfico de barras con colores por tipo de vehículo y fabricante clickeable
+# 3. Gráfico de barras con colores por tipo de vehículo y fabricante clickeable
 st.header("Gráfico de barras")
 
-fig = px.bar(car_data, x="model", color="type", barmode="group")
+fig = px.bar(filtered_car_data, x="model", color="type", barmode="group")
 st.plotly_chart(fig, use_container_width=True)
 
-# 3. Histograma de "condición" vs "Año del modelo"
+# 4. Histograma de "condición" vs "Año del modelo"
 st.header("Histograma de Condición vs Año del Modelo")
-hist_fig = px.histogram(car_data, x="condition", y="model_year", color="condition")
+hist_fig = px.histogram(filtered_car_data, x="condition", y="model_year", color="condition")
 hist_fig.update_layout(barmode='overlay')
 st.plotly_chart(hist_fig, use_container_width=True)
 
-# 4. Comparador de precios entre fabricantes
+# 5. Comparador de precios entre fabricantes
 st.header("Comparador de precios entre fabricantes")
 
-# Usamos la columna 'type' para representar a los fabricantes
-manufacturer1 = st.selectbox("Selecciona el primer fabricante", car_data['type'].unique())
-manufacturer2 = st.selectbox("Selecciona el segundo fabricante", car_data['type'].unique())
+# Usamos la columna 'manufacturer' para representar a los fabricantes
+manufacturer1 = st.selectbox("Selecciona el primer fabricante", filtered_car_data['manufacturer'].unique())
+manufacturer2 = st.selectbox("Selecciona el segundo fabricante", filtered_car_data['manufacturer'].unique())
 
 # Filtrar los datos para los fabricantes seleccionados
-filtered_data = car_data[(car_data['type'] == manufacturer1) | (car_data['type'] == manufacturer2)]
+filtered_data = filtered_car_data[(filtered_car_data['manufacturer'] == manufacturer1) | (filtered_car_data['manufacturer'] == manufacturer2)]
 
 # Crear el histograma de precios con los fabricantes seleccionados
-hist_compare = px.histogram(filtered_data, x="price", color="type", barmode="overlay")
+hist_compare = px.histogram(filtered_data, x="price", color="manufacturer", barmode="overlay")
 st.plotly_chart(hist_compare, use_container_width=True)
