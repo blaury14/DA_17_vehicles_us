@@ -10,6 +10,7 @@ st.title("DA-17_Bastian Laury")
 
 # 1. Listado de fabricantes con menos de 1000 anuncios
 st.header("Fabricantes con menos de 1000 anuncios")
+car_data['manufacturer'] = car_data['model'].apply(lambda x: x.split()[0])
 manufacturers_less_than_1000 = car_data['manufacturer'].value_counts()[car_data['manufacturer'].value_counts() < 1000]
 st.write(manufacturers_less_than_1000)
 
