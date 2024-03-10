@@ -26,7 +26,7 @@ car_data = car_data[['price', 'model_year', 'fabricante', 'modelo', 'condition',
                      'date_posted', 'days_listed']]
 
 # Establecer el título de la página
-st.title("DA-17_Bastian Laury")
+st.title("Anuncio de Venta de Vehiculos en USA")
 
 # 1. Data Viewer con un checkbox para incluir fabricantes con menos de 1000 anuncios
 st.header("Data Viewer")
